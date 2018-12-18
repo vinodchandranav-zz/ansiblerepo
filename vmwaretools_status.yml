@@ -1,0 +1,8 @@
+- name: check for VMware tools status
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: VMware status check
+      command: /etc/vmware-tools/services.sh status
+      register: _status
+    - debug: msg="{{ inventory_hostname}} {{ _status.stdout }}"

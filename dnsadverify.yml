@@ -1,0 +1,27 @@
+- hosts: all
+  #gather_facts: no
+  tasks:
+#  - name: create folder
+#    local_action: file dest=/tmp/cron_collect state=directory owner=root group=root mode=0700
+  - block:
+    - name: "collect DNS and AD config entries from servers "
+      script: "/root/play/scripts/dnsadverify.sh"
+      register: dnsad
+      ignore_errors: yes
+    - name: move to csv file
+      local_action: copy content={{ dnsad.stdout }} dest=/root/play/scripts/output/{{ansible_fqdn}}.csv
+- hosts: localhost
+  gather_facts: no
+  tasks:
+  - name: combine into one file
+    assemble:
+      src: /root/play/scripts/output/
+      dest: /tmp/dnsadverify.csv
+      owner: root
+      group: root
+      mode: 0640
+  - name: remove blanks
+    lineinfile:
+      dest: /tmp/dnsadverify.csv
+      regexp: '^\s$'
+      state: absent

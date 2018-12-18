@@ -1,0 +1,21 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: copy the merge script
+      copy:
+        src: /root/play/scripts/merge_sar.sh
+        dest: /var/log/sa/
+        owner: root
+        mode: 0744
+
+    - name: run the Merge script 
+      shell: sh merge_sar.sh chdir=/var/log/sa/
+      environment: LC_ALL=C
+      ignore_errors: True
+
+    - name: fetch sar files
+      fetch:
+        src: /var/log/sa/sarmonthly.txt
+        dest: /root/play/scripts/output/sar/{{ ansible_hostname }}sarmonthly.txt
+        flat: yes

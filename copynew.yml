@@ -1,0 +1,13 @@
+---
+- hosts: sharedcdpservers
+  sudo: yes
+  tasks: 
+   - copy:
+      src: ~/{{item}}
+      dest: /root/AV
+      owner: root
+      backup: yes
+      mode: 0744
+      force: yes
+     with_items:
+      ['MCFEE/installdeb.sh','MCFEE/install.sh','MCFEE/lshDet.McS','MCFEE/McAfeeVSEForLinux-1.9.2.29197.noarch.tar.gz','MCFEE/PkgCatalog.z','MCFEE/installrpm.sh','MCFEE/kernel-module-source.tar.gzh','MCFEE/McAfeeVSEForLinux-1.9.2.29197-installer','MCFEE/McAfeeVSEForLinux-1.9.2.29197-release-EPO.zip']

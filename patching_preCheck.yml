@@ -1,0 +1,9 @@
+- hosts: all
+  tasks:
+    - name: pre check before patching
+      script: /root/play/scripts/pre.sh
+      ignore_errors: true
+      register: pre_hint
+    - name: Confirmation
+      command: echo "Pre check completed"
+      when: pre_hint.stdout.find("success") != -1

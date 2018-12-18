@@ -1,0 +1,6 @@
+- hosts: all
+  tasks:
+    - name: mount NFS/CIFS share
+      command: mount -a
+      ignore_errors: true
+      register: mount_hint

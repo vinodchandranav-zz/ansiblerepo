@@ -1,0 +1,12 @@
+---
+- hosts: prod3
+  sudo: yes
+  gather_facts: False
+  tasks: 
+   - copy:
+      src: /root/MCFEE
+      dest: /root
+      owner: root
+      backup: yes
+      mode: 0744
+      force: yes

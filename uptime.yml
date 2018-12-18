@@ -1,0 +1,6 @@
+- hosts: all 
+  tasks:
+   - name: "Check for machines that have an uptime that exceeds 300 days"
+     shell: echo "$(hostname) has been up for $(uptime | cut -d ',' -f 1 | cut -d ' ' -f 4) days"
+     when: ansible_uptime_seconds > 25920000
+     register: uptime_exceeded

@@ -1,0 +1,7 @@
+---
+- hosts: all
+  tasks:		
+    - name: Install Libselinux Python 
+      yum:
+        name: libselinux-python
+        state: installed

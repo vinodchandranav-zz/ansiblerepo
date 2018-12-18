@@ -1,0 +1,10 @@
+---
+# Run with ansible-playbook <filename> -k
+#   (make sure to add the IPs of machines you want to manage to /etc/ansible/hosts first)
+
+- hosts: all 
+  gather_facts: False
+
+  tasks:
+    - name: Install Python 2
+      raw: test -e /usr/bin/python || (yum install -y python)

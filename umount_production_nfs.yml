@@ -1,0 +1,7 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+   - name: mounting  server
+     command: /bin/umount -l /hybris/hybris/data/media
+     ignore_errors: true

@@ -1,0 +1,38 @@
+- hosts: all
+  tasks:
+#    - name: pre check before patching
+#      script: /root/ansible/script/pre.sh
+#      ignore_errors: true
+#      register: pre_hint
+    - name: patching
+      yum:
+        name: '*'
+        state: latest
+#      when: pre_hint.stdout.find("success") != -1
+      register: patching_hint
+    - name: check for reboot 
+      shell: if [ $(rpm -q kernel|tail -n 1) != kernel-$(uname -r) ]; then echo 'reboot'; else echo 'no'; fi
+      ignore_errors: true
+      register: reboot_hint
+    - name: Reboot
+      command: shutdown -r now
+      async: 0
+      poll: 0
+      when: reboot_hint.stdout.find("reboot") != -1
+      register: rebooting
+    - name: wait for rebooted server to come back
+      local_action: wait_for host={{ ansible_ssh_host | default(inventory_hostname) }}  state=started port=22 delay=30 timeout=300 connect_timeout=15
+      when: rebooting|changed
+#  tasks:
+#    - name: mount NFS/CIFS share
+#      command: mount -a
+#      ignore_errors: true
+#      register: mount_hint
+#    - name: Sending a mail confirmation to pdl
+#      mail:
+#        host: smtp.gmcr.com
+#        port: 25
+#        to: iskeurig-unix.in@capgemini.com
+#        subject: Ansible Testing patching report
+#        body: System {{ ansible_hostname }} has completed patching .
+#      delegate_to: localhost
