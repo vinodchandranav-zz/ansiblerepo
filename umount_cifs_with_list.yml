@@ -1,0 +1,18 @@
+---
+
+# Cleanup
+- name: Unmount All Directories
+  mount:
+    name: "{{ item.name }}"
+    src: "{{ item.src }}"
+    fstype: "{{ item.fstype }}"
+    state: unmounted
+  become: True
+  with_items:
+   - { name: '/mnt/boot', src: '/dev/{{ boot_device_name }}1', fstype: 'ext2' }
+   - { name: '/mnt/dev/shm', src: 'tmpfs', fstype: 'tmpfs' }
+   - { name: '/mnt/dev/pts', src: 'devpts', fstype: 'devpts' }
+   - { name: '/mnt/dev', src: 'tmpfs', fstype: 'tmpfs' }
+   - { name: '/mnt/proc', src: 'proc', fstype: 'proc' }
+   - { name: '/mnt/sys', src: 'sysfs', fstype: 'sysfs' }
+- { name: '/mnt', src: '/dev/{{ root_device_name }}', fstype: 'ext4' }
